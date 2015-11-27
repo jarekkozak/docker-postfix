@@ -1,3 +1,4 @@
 #!/bin/bash
-
-docker build -t catatnight/postfix .
+IMAGE=jarek/postfix
+docker rmi -f $IMAGE
+docker build -t $IMAGE .
