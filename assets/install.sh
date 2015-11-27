@@ -143,6 +143,8 @@ cat >> /etc/opendkim/SigningTable <<EOF
 EOF
 chown opendkim:opendkim $(find /etc/opendkim/domainkeys -iname *.private)
 chmod 400 $(find /etc/opendkim/domainkeys -iname *.private)
+echo "RequireSafeKeys   false" >> /etc/opendkim.conf
+
 
 
 
