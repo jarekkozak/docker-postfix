@@ -41,7 +41,7 @@ postconf -e mynetworks='127.0.0.0/8 [::ffff:127.0.0.0]/104 [::1]/128 172.17.0.0/
 #postconf -e broken_sasl_auth_clients=yes
 #postconf -e smtpd_recipient_restrictions=permit_sasl_authenticated,reject_unauth_destination
 
-## Relay 
+## Relay
 postconf -e smtpd_relay_restrictions=""
 postconf -e smtpd_recipient_restrictions="permit_mynetworks, reject"
 
@@ -95,7 +95,7 @@ postconf -e milter_default_action=accept
 postconf -e smtpd_milters=inet:localhost:12301
 postconf -e non_smtpd_milters=inet:localhost:12301
 
-## Relay 
+## Relay
 postconf -e smtpd_relay_restrictions=
 postconf -e smtpd_recipient_restrictions=permit_mynetworks, reject
 
@@ -143,7 +143,4 @@ cat >> /etc/opendkim/SigningTable <<EOF
 EOF
 chown opendkim:opendkim $(find /etc/opendkim/domainkeys -iname *.private)
 chmod 400 $(find /etc/opendkim/domainkeys -iname *.private)
-
-
-
-
+echo "RequireSafeKeys   false" >> /etc/opendkim.conf
