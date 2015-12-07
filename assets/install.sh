@@ -37,9 +37,16 @@ postconf -e mynetworks='127.0.0.0/8 [::ffff:127.0.0.0]/104 [::1]/128 172.17.0.0/
 # Cyrus-SASL support for authentication of mail clients.
 ############
 # /etc/postfix/main.cf
-postconf -e smtpd_sasl_auth_enable=yes
-postconf -e broken_sasl_auth_clients=yes
-postconf -e smtpd_recipient_restrictions=permit_sasl_authenticated,reject_unauth_destination
+#postconf -e smtpd_sasl_auth_enable=yes
+#postconf -e broken_sasl_auth_clients=yes
+#postconf -e smtpd_recipient_restrictions=permit_sasl_authenticated,reject_unauth_destination
+
+## Relay 
+postconf -e smtpd_relay_restrictions=""
+postconf -e smtpd_recipient_restrictions="permit_mynetworks, reject"
+
+
+
 # smtpd.conf
 cat >> /etc/postfix/sasl/smtpd.conf <<EOF
 pwcheck_method: auxprop
@@ -67,7 +74,7 @@ if [[ -n "$(find /etc/postfix/certs -iname *.crt)" && -n "$(find /etc/postfix/ce
   postconf -P "submission/inet/smtpd_tls_security_level=encrypt"
   postconf -P "submission/inet/smtpd_sasl_auth_enable=yes"
   postconf -P "submission/inet/milter_macro_daemon_name=ORIGINATING"
-  postconf -P "submission/inet/smtpd_recipient_restrictions=permit_sasl_authenticated,reject_unauth_destination"
+#  postconf -P "submission/inet/smtpd_recipient_restrictions=permit_sasl_authenticated,reject_unauth_destination"
 fi
 
 #############
@@ -87,6 +94,11 @@ postconf -e milter_protocol=2
 postconf -e milter_default_action=accept
 postconf -e smtpd_milters=inet:localhost:12301
 postconf -e non_smtpd_milters=inet:localhost:12301
+
+## Relay 
+postconf -e smtpd_relay_restrictions=
+postconf -e smtpd_recipient_restrictions=permit_mynetworks, reject
+
 
 cat >> /etc/opendkim.conf <<EOF
 AutoRestart             Yes
@@ -131,3 +143,7 @@ cat >> /etc/opendkim/SigningTable <<EOF
 EOF
 chown opendkim:opendkim $(find /etc/opendkim/domainkeys -iname *.private)
 chmod 400 $(find /etc/opendkim/domainkeys -iname *.private)
+
+
+
+
