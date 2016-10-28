@@ -28,7 +28,7 @@ EOF
 chmod +x /opt/postfix.sh
 postconf -e myhostname=$maildomain
 postconf -F '*/*/chroot = n'
-postconf -e mynetworks='127.0.0.0/8 [::ffff:127.0.0.0]/104 [::1]/128 172.17.0.0/16'
+postconf -e mynetworks='127.0.0.0/8 [::ffff:127.0.0.0]/104 [::1]/128 172.17.0.0/16 192.168.0.0/16'
 
 
 ############
@@ -130,7 +130,7 @@ EOF
 cat >> /etc/opendkim/TrustedHosts <<EOF
 127.0.0.1
 localhost
-192.168.0.1/24
+192.168.0.0/16
 172.17.0.0/16
 
 *.$maildomain

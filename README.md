@@ -40,6 +40,10 @@ TLS and OpenDKIM support are optional.
 			--name postfix -d catatnight/postfix
 	```
 
+4. Test 
+	export REPLYTO=cms-replies@example.com
+	mail -aFrom:cms-sends@example.com -s 'Testing'
+
 ## Note
 + Login credential should be set to (`username@mail.example.com`, `password`) in Smtp Client
 + You can assign the port of MTA on the host machine to one other than 25 ([postfix how-to](http://www.postfix.org/MULTI_INSTANCE_README.html))
