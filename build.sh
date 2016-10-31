@@ -1,4 +1,4 @@
 #!/bin/bash
-IMAGE=jarek/postfix
+. smtp-config
 docker rmi -f $IMAGE
 docker build -t $IMAGE .

@@ -46,6 +46,27 @@ postconf -e smtpd_relay_restrictions=""
 postconf -e smtpd_recipient_restrictions="permit_mynetworks, reject"
 
 
+#Set as internet relay host 
+if [ -n "$SMTP_SERVER" ] && [ -n "$SMTP_USERNAME" ] && [ -n "$SMTP_PASSWORD" ]; then 
+postconf -e myhostname=localhost
+postconf -e mydestination=localhost
+postconf -e myorigin=$maildomain
+postconf -e relayhost=[$SMTP_SERVER]:587
+postconf -e smtp_use_tls=yes
+postconf -e smtp_sasl_auth_enable=yes
+postconf -e smtp_sasl_password_maps=hash:/etc/postfix/sasl_passwd
+postconf -e smtp_sasl_security_options=noanonymous
+postconf -e sender_canonical_maps=hash:/etc/postfix/canonical
+
+echo "[$SMTP_SERVER]:587 $SMTP_USERNAME:$SMTP_PASSWORD" >> /etc/postfix/sasl_passwd
+postmap /etc/postfix/sasl_passwd
+
+echo "@$maildomain $SMTP_USERNAME" > /etc/postfix/canonical
+postmap /etc/postfix/canonical
+
+fi
+
+
 
 # smtpd.conf
 cat >> /etc/postfix/sasl/smtpd.conf <<EOF
