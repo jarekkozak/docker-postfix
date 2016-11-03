@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# rename to smtp-config
+#imagename
+IMAGE=jarek/smtp
+PORT=10025
+CONTAINER=smtp
+DOMAIN=example.pl
+SMTP_SERVER=googlemail.com
+SMTP_USERNAME=noreply@googlemail.com
+SMTP_PASSWORD=password
+
