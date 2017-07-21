@@ -2,10 +2,10 @@
 
 # rename to smtp-config
 #imagename
-IMAGE=jarek/smtp
-PORT=10025
-CONTAINER=smtp
-DOMAIN=example.pl
+SMTP_IMAGE=jarek/smtp
+SMTP_PORT=10025
+SMTP_CONTAINER=smtp
+SMTP_DOMAIN=example.pl
 SMTP_SERVER=googlemail.com
 SMTP_USERNAME=noreply@googlemail.com
 SMTP_PASSWORD=password

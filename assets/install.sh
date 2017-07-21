@@ -28,7 +28,9 @@ EOF
 chmod +x /opt/postfix.sh
 postconf -e myhostname=$maildomain
 postconf -F '*/*/chroot = n'
-postconf -e mynetworks='127.0.0.0/8 [::ffff:127.0.0.0]/104 [::1]/128 172.17.0.0/16 192.168.0.0/16'
+postconf -e mynetworks='127.0.0.0/8 [::ffff:127.0.0.0]/104 [::1]/128 172.0.0.0/8 192.168.0.0/16'
+
+#postconf -e mynetworks='0.0.0.0/32'
 
 
 ############
@@ -46,19 +48,27 @@ postconf -e smtpd_relay_restrictions=""
 postconf -e smtpd_recipient_restrictions="permit_mynetworks, reject"
 
 
+if [ -z "$SMTP_SERVER_USE_TLS" ]; then 
+SMTP_SERVER_USE_TLS=yes
+fi
+
+if [ -z "$SMTP_SERVER_PORT" ]; then 
+SMTP_SERVER_PORT=587
+fi
+
 #Set as internet relay host 
 if [ -n "$SMTP_SERVER" ] && [ -n "$SMTP_USERNAME" ] && [ -n "$SMTP_PASSWORD" ]; then 
 postconf -e myhostname=localhost
 postconf -e mydestination=localhost
 postconf -e myorigin=$maildomain
-postconf -e relayhost=[$SMTP_SERVER]:587
-postconf -e smtp_use_tls=yes
+postconf -e relayhost=[$SMTP_SERVER]:$SMTP_SERVER_PORT
+postconf -e smtp_use_tls=$SMTP_SERVER_USE_TLS
 postconf -e smtp_sasl_auth_enable=yes
 postconf -e smtp_sasl_password_maps=hash:/etc/postfix/sasl_passwd
 postconf -e smtp_sasl_security_options=noanonymous
 postconf -e sender_canonical_maps=hash:/etc/postfix/canonical
 
-echo "[$SMTP_SERVER]:587 $SMTP_USERNAME:$SMTP_PASSWORD" >> /etc/postfix/sasl_passwd
+echo "[$SMTP_SERVER]:$SMTP_SERVER_PORT $SMTP_USERNAME:$SMTP_PASSWORD" >> /etc/postfix/sasl_passwd
 postmap /etc/postfix/sasl_passwd
 
 echo "@$maildomain $SMTP_USERNAME" > /etc/postfix/canonical
